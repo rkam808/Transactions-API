@@ -1,17 +1,17 @@
 services:
-  db:
-    image: mysql:8
-    platform: linux/x86_64
-    environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-    volumes:
-      - ./db:/docker-entrypoint-initdb.d
-    ports:
-      - 3306:3306
-    hostname: db
-
   app:
-    build:
-      context: app
+    build: ./app
     ports:
-      - 8888:8888
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=mysql2://root:password@db:3306/codetest
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306" # Required for go test to reach the DB from WSL
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=codetest
