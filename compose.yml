@@ -4,16 +4,42 @@ services:
     volumes:
       - ./app:/rails-api
     ports:
-      - "8080:8080"
+      - "8080:8080" # Mapping for standard dev server
+      - "8888:8080" # Mapping for Test server
+    working_dir: /rails-api
     depends_on:
       - db
     environment:
-      - DATABASE_URL=mysql2://root:password@db:3306/codetest
+      - RAILS_ENV=development
+      - DATABASE_URL=mysql2://root@db:3306/codetest
 
   db:
     image: mysql:8.0
     ports:
-      - "3306:3306" # Required for go test to reach the DB from WSL
+      - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=codetest
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  tester:
+    image: golang:1.23
+    volumes:
+      - .:/test-dir
+    working_dir: /test-dir
+    # This maps 'localhost' inside the container to the host machine's 'host-gateway' interface
+    extra_hosts:
+      - "localhost:host-gateway"
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=codetest
+      - MYSQL_HOST=127.0.0.1
+      - MYSQL_PORT=3306
+    depends_on:
+      db:
+        condition: service_healthy
+    command: go test

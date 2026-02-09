@@ -9,7 +9,6 @@ RUN apt-get update -qq && apt-get install -y build-essential default-libmysqlcli
 
 WORKDIR /rails-api
 
-# Fix Bundler version mismatch
 RUN gem install bundler -v 2.7.2
 
 COPY Gemfile Gemfile.lock ./
