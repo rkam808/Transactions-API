@@ -7,7 +7,7 @@ FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 # Install dependencies for the mysql2 gem
 RUN apt-get update -qq && apt-get install -y build-essential default-libmysqlclient-dev
 
-WORKDIR /myapp
+WORKDIR /rails-api
 
 # Fix Bundler version mismatch
 RUN gem install bundler -v 2.7.2
