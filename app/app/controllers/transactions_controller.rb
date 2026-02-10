@@ -27,7 +27,7 @@ class TransactionsController < ApplicationController
 
   def set_user
     api_key = request.headers['apikey']
-    api_key_user = User.find_by_api_key(api_key)
+    api_key_user = User.find_by(api_key: api_key)
 
     # Make sure db User associated with this API key is same as requesting User
     return unless api_key_user.id == transaction_params[:user_id]
