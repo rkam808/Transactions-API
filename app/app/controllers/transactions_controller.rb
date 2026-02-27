@@ -1,13 +1,13 @@
 class TransactionsController < ApplicationController
   before_action :set_user, only: [:create]
+  # To throttle bad actors (potential Production-grade optimization)
+  # before_action rate_limit to: 10, within: 10.minutes, only: :create
 
   def create
     Transaction.transaction do
-      return render json: { error: 'Unauthorized' }, status: :unauthorized unless @user
-
       @user.lock!
 
-      return render json: { error: 'payment required' }, status: 402 if surpasses_limit?(transaction_params[:amount])
+      return render json: { error: 'payment required' }, status: 402 if surpasses_limit?(transaction_params[:amount]&.to_i)
 
       transaction = Transaction.new(transaction_params)
 
@@ -29,8 +29,12 @@ class TransactionsController < ApplicationController
     api_key = request.headers['apikey']
     api_key_user = User.find_by(api_key: api_key)
 
+    return render json: { error: 'Unauthorized' }, status: :unauthorized unless api_key_user
+
     # Make sure db User associated with this API key is same as requesting User
-    return unless api_key_user.id == transaction_params[:user_id]
+    if transaction_params[:user_id]&.to_i != api_key_user.id
+      return render json: { error: 'Mismatched User Identity' }, status: :forbidden
+    end
 
     @user = api_key_user
   end
