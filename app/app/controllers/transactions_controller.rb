@@ -20,7 +20,10 @@ class TransactionsController < ApplicationController
   end
 
   def index
-    transactions = @user.transactions.order(created_at: :desc)
+    sort_by = params[:sort_by].presence_in(%w(amount created_at)) || 'created_at'
+    sort_order = params[:sort_order].presence_in(%w(asc desc)).to_sym || :desc
+
+    transactions = @user.transactions.order(sort_by => sort_order)
 
     render json: transactions.to_json, status: :ok
   end
