@@ -20,6 +20,6 @@ class User < ApplicationRecord
   end
 
   def frontend_user?
-    email.present? && password.present?
+    email.present? || password.present?
   end
 end
