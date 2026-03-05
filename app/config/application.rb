@@ -28,6 +28,9 @@ module App
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
 
+    # Tell Rails to use SQL schema format to work with existing external db schema.
+    config.active_record.schema_format = :sql
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

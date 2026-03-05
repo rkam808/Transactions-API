@@ -5,7 +5,7 @@ ARG RUBY_VERSION=3.3.5
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
 # Install dependencies for the mysql2 gem
-RUN apt-get update -qq && apt-get install -y build-essential default-libmysqlclient-dev
+RUN apt-get update -qq && apt-get install -y build-essential default-libmysqlclient-dev default-mysql-client
 
 WORKDIR /rails-api
 
