@@ -7,8 +7,6 @@ class TransactionsController < ApplicationController
     Transaction.transaction do
       @user.lock!
 
-      return render json: { error: 'payment required' }, status: 402 if surpasses_limit?(transaction_params[:amount]&.to_i)
-
       transaction = Transaction.new(transaction_params)
       transaction.user = @user
 
@@ -48,9 +46,5 @@ class TransactionsController < ApplicationController
       # end
 
     @user = api_key_user
-  end
-
-  def surpasses_limit?(amount)
-    @user.current_amount + amount > 1000
   end
 end
