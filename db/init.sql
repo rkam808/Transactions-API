@@ -5,8 +5,10 @@ drop table if exists codetest.users;
 create table if not exists codetest.users
 (
   id      int unsigned not null primary key auto_increment,
-  name    varchar(128) not null,
-  api_key varchar(256) not null,
+  name            varchar(128) not null,
+  api_key         varchar(256) not null,
+  email           varchar(256) null,
+  password_digest varchar(256) null,
   unique uniq_api_key (api_key)
 ) character set utf8mb4 collate utf8mb4_bin;
 
@@ -17,6 +19,8 @@ create table if not exists codetest.transactions
   user_id     int unsigned not null,
   amount      int          not null,
   description varchar(256) not null,
+  created_at  timestamp    not null default current_timestamp,
+  updated_at  timestamp    not null default current_timestamp on update current_timestamp,
   CONSTRAINT fk_transactions_users FOREIGN KEY (user_id) REFERENCES users (id)
 ) character set utf8mb4 collate utf8mb4_bin;
 
