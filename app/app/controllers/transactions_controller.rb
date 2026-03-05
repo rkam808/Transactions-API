@@ -10,6 +10,7 @@ class TransactionsController < ApplicationController
       return render json: { error: 'payment required' }, status: 402 if surpasses_limit?(transaction_params[:amount]&.to_i)
 
       transaction = Transaction.new(transaction_params)
+      transaction.user = @user
 
       if transaction.save
         render json: transaction.to_json, status: 201
