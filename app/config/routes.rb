@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   # OR the Rails way:
   # resources :transactions, only: :create
 
+  post '/login', to: 'sessions#create'
   post '/signup', to: 'users#create'
 end
