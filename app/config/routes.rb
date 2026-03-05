@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   post '/transactions', to: 'transactions#create'
   # OR the Rails way:
   # resources :transactions, only: :create
+
+  post '/signup', to: 'users#create'
 end
