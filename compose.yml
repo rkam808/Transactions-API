@@ -15,6 +15,8 @@ services:
 
   db:
     image: mysql:8.0
+    volumes:
+      - mysql_data:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
@@ -43,3 +45,6 @@ services:
       db:
         condition: service_healthy
     command: go test
+
+volumes:
+  mysql_data:
