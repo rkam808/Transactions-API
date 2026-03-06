@@ -1,2 +1,6 @@
 app/log/
 app/tmp/
+app/config/master.key
+app/db/*.sqlite3
+app/storage/*
+app/vendor/*
