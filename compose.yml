@@ -12,7 +12,13 @@ services:
     environment:
       - RAILS_ENV=development
       # - DATABASE_URL=mysql2://root@db:3306/codetest
-    command: bash -c "rails db:prepare RAILS_ENV=test && rm -f tmp/pids/server.pid && bundle exec rails s -p 8080 -b '0.0.0.0'"
+    command: >
+      bash -c "
+      echo 'Waiting for database...' &&
+      sleep 5 &&
+      rails db:prepare RAILS_ENV=test &&
+      rm -f tmp/pids/server.pid &&
+      bundle exec rails s -p 8080 -b '0.0.0.0'"
 
   db:
     image: mysql:8.0
@@ -24,9 +30,11 @@ services:
       - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=codetest
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root"]
+      interval: 5s
+      timeout: 5s
       retries: 10
+      start_period: 15s
 
   tester:
     image: golang:1.23

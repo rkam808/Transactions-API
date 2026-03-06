@@ -31,7 +31,7 @@ var initSQL string
 
 // TestCreate Test whether the transaction registration implementation passes the test.
 func TestCreate(t *testing.T) {
-	conn, err := sql.Open("mysql", "root@tcp(127.0.0.1)/codetest")
+	conn, err := sql.Open("mysql", "root@tcp(db:3306)/codetest")
 	if err != nil {
 		t.Fatal(err)
 	}
