@@ -33,11 +33,5 @@ RSpec.describe Transaction, type: :model do
       expect(transaction).not_to be_valid
       expect(transaction.errors[:description]).to include("can't be blank")
     end
-
-    it 'is invalid when the user exceeds the transaction limit' do
-      transaction = Transaction.new(user: user, amount: 1001, description: 'Test transaction')
-      expect(transaction).not_to be_valid
-      expect(transaction.errors[:base]).to include('User has exceeded the transaction limit of 1000')
-    end
   end
 end

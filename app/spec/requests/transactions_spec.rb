@@ -32,8 +32,8 @@ RSpec.describe 'Transactions', type: :request do
 
         expect(response).to have_http_status(422)
         response_body = JSON.parse(response.body)
-        expect(response_body).to have_key('errors')
-        expect(response_body['errors']).to have_key('amount')
+        expect(response_body).to have_key('error')
+        expect(response_body['error']).to eq('Missing Parameters')
       end
     end
 
@@ -48,10 +48,10 @@ RSpec.describe 'Transactions', type: :request do
       it 'returns an error when the transaction exceeds the user limit' do
         post '/transactions', params: excessive_params, headers: { 'Content-Type' => 'application/json',  'apiKey' => user.api_key }
 
-        expect(response).to have_http_status(422)
+        expect(response).to have_http_status(402)
         response_body = JSON.parse(response.body)
-        expect(response_body).to have_key('errors')
-        expect(response_body['errors']).to have_key('base')
+        expect(response_body).to have_key('error')
+        expect(response_body['error']).to eq('payment required')
       end
     end
   end

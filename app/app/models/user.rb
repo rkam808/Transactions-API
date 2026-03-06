@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :transactions
+  has_many :transactions, dependent: :destroy
   has_secure_password validations: false
   before_validation :generate_api_key
   validates :name, presence: true
