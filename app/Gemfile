@@ -20,6 +20,9 @@ gem "bcrypt", "~> 3.1.7"
 # CORS
 gem "rack-cors"
 
+# Pagination
+gem "pagy", "~> 6.0"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
 # gem "rack-cors"
 
